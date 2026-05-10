@@ -3,16 +3,15 @@ from django.db.models import QuerySet
 
 from db.models import Order, Ticket
 from django.contrib.auth import get_user_model
-
-
+from django.utils import timezone
 
 @transaction.atomic
-def create_order(tickets: list, username: str, date=None) -> Order:
+def create_order(tickets: list, username: str, date: str = None) -> Order:
     user = get_user_model().objects.get(username=username)
-    order = Order.objects.create(user=user)
-    if date:
-        order.created_at = date
-        order.save()
+    order = Order.objects.create(
+        user=user,
+        created_at=date if date else timezone.now()
+    )
     for ticket in tickets:
         Ticket.objects.create(
             order=order,
@@ -22,9 +21,10 @@ def create_order(tickets: list, username: str, date=None) -> Order:
         )
     return order
 
+
 def get_orders(username: str = None) -> QuerySet[Order]:
     queryset = Order.objects.all()
 
     if username:
-        queryset = Order.objects.filter(user__username=username)
+        queryset = queryset.filter(user__username=username)
     return queryset
