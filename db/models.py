@@ -68,6 +68,7 @@ class Order(models.Model):
     def __str__(self) -> str:
         return str(self.created_at)
 
+
 class Ticket(models.Model):
     movie_session = models.ForeignKey(
         to=MovieSession,
