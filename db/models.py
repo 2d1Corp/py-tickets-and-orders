@@ -55,7 +55,7 @@ class MovieSession(models.Model):
 
 
 class Order(models.Model):
-    created_at = models.DateTimeField(auto_now_add=False, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
         to="User",
         on_delete=models.CASCADE,
@@ -66,7 +66,7 @@ class Order(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self) -> str:
-        return str(self.created_at)
+        return f"<Order: {self.created_at}>"
 
 
 class Ticket(models.Model):
